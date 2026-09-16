@@ -89,7 +89,6 @@ function sessionConfigFor(demo, voice = VOICE, input) {
   return liveSessionConfig({
     model: LIVE_MODEL,
     voice,
-    speed: LIVE_SPEED,
     instructions,
     delegateModel: LIVE_DELEGATE_MODEL,
     delegateInstructions: `És o raciocínio de uma chamada da ${demo.assistantName} (${demo.company}). Chama end_call só depois do fecho confirmado.`,

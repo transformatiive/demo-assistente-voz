@@ -53,24 +53,25 @@ test("OPENAI_LIVE_MODEL wins; leftover REALTIME_MODEL=gpt-realtime-2.1 does not"
   assert.equal(resolveGptLiveSpeed({ OPENAI_LIVE_SPEED: "9" }), 1.5);
 });
 
-test("live session shape is WebRTC GPT-Live (no audio.format, speed 1.0, end_call)", () => {
+test("live session shape omits type and speed (OpenAI unknown_parameter)", () => {
   const session = liveSessionConfig({
     instructions: "Alice pt-PT",
     delegateInstructions: "end_call only"
   });
-  assert.equal(session.type, "live");
+  assert.equal("type" in session, false);
+  assert.equal(session.type, undefined);
   assert.equal(session.model, "gpt-live-1");
   assert.equal(session.audio.output.voice, "marin");
-  assert.equal(session.audio.output.speed, 1.0);
+  assert.equal("speed" in session.audio.output, false);
+  assert.equal(session.audio.output.speed, undefined);
   assert.equal(session.audio.format, undefined);
   const sipAccept = liveSessionConfigForSipAccept({
     instructions: "Alice pt-PT",
     delegateInstructions: "end_call only"
   });
+  assert.equal("type" in sipAccept, false);
   assert.equal(sipAccept.audio.output.voice, "marin");
   assert.equal("speed" in sipAccept.audio.output, false);
-  const omitted = liveSessionConfig({ omitSpeed: true });
-  assert.equal("speed" in omitted.audio.output, false);
   assert.equal(session.delegation.type, "responses");
   assert.equal(session.delegation.responses.tools[0].name, "end_call");
   assert.equal(openaiLiveSessionsUrl("https://api.openai.com/"), "https://api.openai.com/v1/live/sessions");
