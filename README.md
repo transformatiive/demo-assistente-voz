@@ -33,7 +33,7 @@ npm start              # http://127.0.0.1:3847
 ## Brand tokens (web pages only)
 
 - **CJ**: Montserrat · accent `#01B5C5` · ink `#143852` · bg `#F7F8FA` · SVG wordmark (PNG assets optional under `/cj/`)
-- **Simon Says**: Albert Sans + Montserrat (as on [simonsays.studio](https://www.simonsays.studio/)) · ink `#1a1814` · gold `#c8a46b` / sand `#d8c3a5` · white canvas · official stacked wordmark + `S` favicon
+- **Simon Says**: Albert Sans + Montserrat (as on [simonsays.studio](https://www.simonsays.studio/)) · ink `#1a1814` · sand accent `#AC9D8B` · white canvas · official stacked wordmark from Sanity (`3d6ca656`) + `S` favicon
 
 ## Script differences
 

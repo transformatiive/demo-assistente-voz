@@ -107,12 +107,14 @@ test("browser default is GPT-Live WebRTC, not Grok/Ara", () => {
 test("Lia page uses Simon Says Studio wordmark and distinguishes mic vs session errors", () => {
   assert.match(logo, /aria-label="Simon Says Studio"/);
   assert.match(logo, /viewBox="0 0 245 149"/);
+  assert.match(logo, /cdn\.sanity\.io\/images\/3d6ca656/);
   assert.doesNotMatch(logo, />SS</);
   assert.match(html, /href="favicon.ico"/);
   assert.match(html, /apple-icon\.png/);
-  assert.match(html, /#c8a46b/);
+  assert.match(html, /#AC9D8B/);
   assert.match(html, /#1a1814/);
   assert.doesNotMatch(html, /#2a9d90/);
+  assert.doesNotMatch(html, /#c8a46b/);
   assert.match(html, /Permita o microfone no browser/);
   assert.match(html, /sessão de voz não está disponível/);
   assert.match(html, /Falha ao criar a sessão de voz/);
