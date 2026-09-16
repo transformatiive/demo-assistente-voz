@@ -27,18 +27,18 @@ npm start              # http://127.0.0.1:3847
 | `GPT_LIVE_MODEL` / `GPT_LIVE_VOICE` / `GPT_LIVE_SPEED` | No | Defaults from `live-session.js` |
 | `TEXT_MODEL` | No | Post-call extract (default `gpt-5.4-mini`) |
 | `RESULT_WEBHOOK` | No | Optional n8n/webhook for call results |
-| `XAI_API_KEY` | No | Only if testing Grok tab |
-| `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` | No | Only if testing ElevenLabs tab |
+| `XAI_API_KEY` | No | Server stub only (not offered in the Lia UI) |
+| `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` | No | Server stub only (not offered in the Lia UI) |
 
 ## Brand tokens (web pages only)
 
 - **CJ**: Montserrat · accent `#01B5C5` · ink `#143852` · bg `#F7F8FA` · SVG wordmark (PNG assets optional under `/cj/`)
-- **Simon Says**: Albert Sans + Montserrat · accent `#2a9d90` · ink `#35332F` · warm bg `#f7f4ef` · SVG wordmark
+- **Simon Says**: Albert Sans + Montserrat (as on [simonsays.studio](https://www.simonsays.studio/)) · ink `#1a1814` · gold `#c8a46b` / sand `#d8c3a5` · white canvas · official stacked wordmark + `S` favicon
 
 ## Script differences
 
 - **CJ**: Same insurance intake script as Alfa (simulation / policy / claim / cancel), renamed to Clara + CJ Seguros.
-- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree.
+- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree. The Lia page (`/simon/`) is **GPT-Live 1 only** — no Grok / ElevenLabs picker.
 
 ## Deploy
 
