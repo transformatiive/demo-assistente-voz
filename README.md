@@ -1,10 +1,10 @@
 # demo-assistente-voz
 
-Dual **web** voice demos on one Node/Express service (Railway-ready):
+Two **separate** web voice demos on one Node/Express service (Railway-ready). They are for different clients — `/` is not a dual picker.
 
 | Path | Demo | Assistant |
 |------|------|-----------|
-| `/` | Landing | — |
+| `/` | Neutral stub | — |
 | `/cj/` | [CJ Seguros](https://cjseguros.pt/) | Clara |
 | `/simon/` | [Simon Says Studio](https://www.simonsays.studio/) | Lia |
 
@@ -27,8 +27,8 @@ npm start              # http://127.0.0.1:3847
 | `GPT_LIVE_MODEL` / `GPT_LIVE_VOICE` / `GPT_LIVE_SPEED` | No | Defaults from `live-session.js` |
 | `TEXT_MODEL` | No | Post-call extract (default `gpt-5.4-mini`) |
 | `RESULT_WEBHOOK` | No | Optional n8n/webhook for call results |
-| `XAI_API_KEY` | No | Server stub only (not offered in the Lia UI) |
-| `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` | No | Server stub only (not offered in the Lia UI) |
+| `XAI_API_KEY` | No | Server stub only (not offered in the UI) |
+| `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` | No | Server stub only (not offered in the UI) |
 
 ## Brand tokens (web pages only)
 
@@ -37,8 +37,8 @@ npm start              # http://127.0.0.1:3847
 
 ## Script differences
 
-- **CJ**: Same insurance intake script as Alfa (simulation / policy / claim / cancel), renamed to Clara + CJ Seguros.
-- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree. The Lia page (`/simon/`) is **GPT-Live 1 only** — no Grok / ElevenLabs picker.
+- **CJ**: Same insurance intake script as Alfa (simulation / policy / claim / cancel), renamed to Clara + CJ Seguros. GPT-Live 1 only — no Grok / ElevenLabs picker.
+- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree. GPT-Live 1 only — no Grok / ElevenLabs picker.
 
 ## Deploy
 

@@ -25,6 +25,8 @@ const serverSrc = fs.readFileSync(path.join(root, "server.js"), "utf8");
 const sipSrc = fs.readFileSync(path.join(root, "sip-agent.js"), "utf8");
 const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const html = fs.readFileSync(path.join(root, "public/simon/index.html"), "utf8");
+const cjHtml = fs.readFileSync(path.join(root, "public/cj/index.html"), "utf8");
+const landing = fs.readFileSync(path.join(root, "public/index.html"), "utf8");
 const logo = fs.readFileSync(path.join(root, "public/simon/logo.svg"), "utf8");
 
 test("defaults are gpt-live-1 / marin / 1.0, not realtime-2.1 or bossa", () => {
@@ -92,16 +94,32 @@ test("server wires Live SDP exchange; advertised voice is marin not ara", () => 
 });
 
 test("browser default is GPT-Live WebRTC, not Grok/Ara", () => {
-  assert.match(html, /provider='openai'/);
-  assert.match(html, /session\.instructions\.append/);
-  assert.match(html, /transport\.sdp/);
-  assert.match(html, /session\.started/);
-  assert.doesNotMatch(html, /\/v1\/realtime\/calls/);
-  assert.doesNotMatch(html, /id="vers"/);
-  assert.doesNotMatch(html, /Grok Live/);
-  assert.doesNotMatch(html, /ElevenLabs/);
-  assert.doesNotMatch(html, /data-p="grok"/);
-  assert.doesNotMatch(html, /data-p="eleven"/);
+  for (const page of [html, cjHtml]) {
+    assert.match(page, /provider='openai'/);
+    assert.match(page, /session\.instructions\.append/);
+    assert.match(page, /transport\.sdp/);
+    assert.match(page, /session\.started/);
+    assert.doesNotMatch(page, /\/v1\/realtime\/calls/);
+    assert.doesNotMatch(page, /id="vers"/);
+    assert.doesNotMatch(page, /Grok Live/);
+    assert.doesNotMatch(page, /ElevenLabs/);
+    assert.doesNotMatch(page, /data-p="grok"/);
+    assert.doesNotMatch(page, /data-p="eleven"/);
+  }
+});
+
+test("root is a neutral stub, not a dual-demo picker", () => {
+  assert.doesNotMatch(landing, /a class="card/);
+  assert.doesNotMatch(landing, /href="\/cj\/"/);
+  assert.doesNotMatch(landing, /href="\/simon\/"/);
+  assert.doesNotMatch(landing, /Demo 1/);
+  assert.doesNotMatch(landing, /Demo 2/);
+  assert.doesNotMatch(landing, /CJ Seguros · Clara/);
+  assert.doesNotMatch(landing, /Simon Says · Lia/);
+  assert.match(landing, /\/cj\//);
+  assert.match(landing, /\/simon\//);
+  assert.doesNotMatch(html, /href="\/cj\//);
+  assert.doesNotMatch(cjHtml, /href="\/simon\//);
 });
 
 test("Lia page uses Simon Says Studio wordmark and distinguishes mic vs session errors", () => {

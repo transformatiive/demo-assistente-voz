@@ -2,78 +2,15 @@
 <html lang="pt">
 <head>
   <meta charset="utf-8">
-  <title>Demos Assistente Voz</title>
+  <title></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#143852">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="robots" content="noindex">
   <style>
-    :root {
-      --bg: #f4f6f8;
-      --ink: #143852;
-      --muted: #5b6b78;
-      --cj: #01B5C5;
-      --ss: #AC9D8B;
-      --card: #fff;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Montserrat, Arial, sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(900px 480px at 10% -10%, #d9f3f6 0%, transparent 55%),
-        radial-gradient(800px 420px at 100% 0%, #ebe4da 0%, transparent 50%),
-        var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1.2rem 3rem;
-    }
-    main { width: 100%; max-width: 720px; }
-    h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin: 0 0 .5rem; }
-    .lead { color: var(--muted); line-height: 1.55; margin: 0 0 1.8rem; max-width: 48ch; }
-    .grid { display: grid; gap: 1rem; }
-    @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
-    a.card {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      background: var(--card);
-      border-radius: 18px;
-      padding: 1.25rem 1.3rem 1.4rem;
-      box-shadow: 0 10px 28px rgba(20,56,82,.08);
-      border: 1px solid #e4ebf0;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-    a.card:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(20,56,82,.12); }
-    a.card .kicker { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .55rem; }
-    a.card.cj .kicker { color: var(--cj); }
-    a.card.ss .kicker { color: var(--ss); }
-    a.card strong { display: block; font-size: 1.15rem; margin-bottom: .35rem; }
-    a.card p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
-    footer { margin-top: 2.5rem; font-size: .75rem; color: #8a95a0; }
+    body{margin:0;min-height:100vh;display:grid;place-items:center;font:15px/1.5 system-ui,sans-serif;color:#6b6f76;background:#f4f4f4}
+    p{margin:0}
   </style>
 </head>
 <body>
-  <main>
-    <h1>Demos Assistente Voz</h1>
-    <p class="lead">Dois assistentes de voz no mesmo serviço Railway. Páginas web distintas — sem números SIP / Telnyx nesta demo.</p>
-    <div class="grid">
-      <a class="card cj" href="/cj/">
-        <div class="kicker">Demo 1</div>
-        <strong>CJ Seguros · Clara</strong>
-        <p>Réplica do fluxo Alfa com identidade CJ Seguros. Teste no browser.</p>
-      </a>
-      <a class="card ss" href="/simon/">
-        <div class="kicker">Demo 2</div>
-        <strong>Simon Says · Lia</strong>
-        <p>Estúdio de fotografia e vídeo em Lisboa — info, aluguer e pedidos de sessão.</p>
-      </a>
-    </div>
-    <footer>Transformatiive · demo-assistente-voz · Alfa SIP intocado</footer>
-  </main>
+  <p>Demos em /cj/ e /simon/.</p>
 </body>
 </html>
