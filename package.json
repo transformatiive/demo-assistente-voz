@@ -1,8 +1,9 @@
 {
-  "name": "alfa-voz-openai",
-  "version": "0.1.0",
+  "name": "demo-assistente-voz",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
+  "description": "Dual web voice demos: CJ Seguros + Simon Says Studio (one Railway service)",
   "scripts": {
     "start": "node server.js",
     "test": "node --test test/*.test.mjs"
