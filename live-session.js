@@ -69,6 +69,16 @@ export function openaiLiveSessionsUrl(openaiBase = "https://api.openai.com") {
   return `${openaiHttpsBase(openaiBase)}/v1/live/sessions`;
 }
 
+/**
+ * Browser RTCPeerConnection offers often lose their trailing newline after JSON + trim.
+ * POST /v1/live/sessions then returns 400 invalid_offer / unmarshal SDP: EOF.
+ * Always forward a non-empty offer that ends with `\n`.
+ */
+export function normalizeSdpOffer(sdp) {
+  const trimmed = typeof sdp === "string" ? sdp.trim() : "";
+  return trimmed ? `${trimmed}\n` : "";
+}
+
 /** Direct SIP host. EU residency uses sip-eu when OPENAI_BASE is the EU API. */
 export function openaiSipHost(openaiBase = "https://api.openai.com") {
   const base = openaiHttpsBase(openaiBase).toLowerCase();

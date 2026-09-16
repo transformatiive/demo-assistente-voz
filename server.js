@@ -17,6 +17,7 @@ import {
   GPT_LIVE_USER_AGENT,
   liveInputFromTranscript,
   liveSessionConfig,
+  normalizeSdpOffer,
   openaiLiveSessionsUrl,
   resolveGptLiveDelegateModel,
   resolveGptLiveModel,
@@ -163,7 +164,7 @@ app.post("/api/:demo/session", requireDemo, async (req, res) => {
     if (!OPENAI_API_KEY) {
       return res.status(503).json({ error: "openai indisponível: falta OPENAI_API_KEY" });
     }
-    const sdp = typeof req.body?.sdp === "string" ? req.body.sdp.trim() : "";
+    const sdp = normalizeSdpOffer(req.body?.sdp);
     if (!sdp) return res.status(400).json({ error: "An SDP offer is required" });
     const voice = resolveGptLiveVoice(process.env, req.body?.voice);
     const input = liveInputFromTranscript(req.body?.transcript);

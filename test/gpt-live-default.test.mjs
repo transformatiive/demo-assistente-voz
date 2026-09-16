@@ -14,6 +14,7 @@ import {
   liveInputFromTranscript,
   liveSessionConfig,
   liveSessionConfigForSipAccept,
+  normalizeSdpOffer,
   openaiLiveSessionsUrl,
   resolveGptLiveModel,
   resolveGptLiveSpeed,
@@ -80,9 +81,23 @@ test("live session shape omits type and speed (OpenAI unknown_parameter)", () =>
   assert.equal(input[1].content[0].type, "output_text");
 });
 
+test("normalizeSdpOffer always ends outbound SDP with a newline", () => {
+  const offer = "v=0\r\no=- 0 0 IN IP4 127.0.0.1";
+  assert.equal(normalizeSdpOffer(offer), `${offer}\n`);
+  assert.equal(normalizeSdpOffer(`${offer}\n`), `${offer}\n`);
+  assert.equal(normalizeSdpOffer(`${offer}\r\n`), `${offer}\n`);
+  assert.equal(normalizeSdpOffer(`  ${offer}  \n\n`), `${offer}\n`);
+  assert.ok(normalizeSdpOffer(offer).endsWith("\n"));
+  assert.equal(normalizeSdpOffer(""), "");
+  assert.equal(normalizeSdpOffer("   \n"), "");
+  assert.equal(normalizeSdpOffer(undefined), "");
+  assert.equal(normalizeSdpOffer({}), "");
+});
+
 test("server wires Live SDP exchange; advertised voice is marin not ara", () => {
   assert.match(serverSrc, /resolveGptLiveModel/);
   assert.match(serverSrc, /openaiLiveSessionsUrl/);
+  assert.match(serverSrc, /normalizeSdpOffer\(req\.body\?\.sdp\)/);
   assert.match(serverSrc, /transport: \{ type: "webrtc", sdp \}/);
   assert.match(serverSrc, /engine: "gpt-live"/);
   assert.match(serverSrc, /speed: LIVE_SPEED/);
