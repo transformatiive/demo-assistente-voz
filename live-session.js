@@ -126,26 +126,23 @@ export function liveInputFromTranscript(linhas) {
 }
 
 /**
- * Live session body for WebRTC and Direct SIP. Omit `audio.format` — the transport negotiates it.
- * Browser WebRTC may pass `audio.output.speed` (1.0 unless OPENAI_LIVE_SPEED, 0.25–1.5).
- * Direct SIP accept rejects `speed` — use `liveSessionConfigForSipAccept` / `{ omitSpeed: true }`.
+ * Live session body for WebRTC and Direct SIP.
+ * POST /v1/live/sessions rejects `session.type` and `session.audio.output.speed`
+ * (`unknown_parameter`). Do not send them. Omit `audio.format` — the transport negotiates it.
  */
 export function liveSessionConfig({
   model = DEFAULT_GPT_LIVE_MODEL,
   voice = DEFAULT_GPT_LIVE_VOICE,
-  speed = DEFAULT_GPT_LIVE_SPEED,
-  omitSpeed = false,
   instructions,
   delegateModel = DEFAULT_GPT_LIVE_DELEGATE_MODEL,
   delegateInstructions,
   input
 } = {}) {
   const session = {
-    type: "live",
     model,
     instructions,
     audio: {
-      output: omitSpeed ? { voice } : { voice, speed }
+      output: { voice }
     },
     delegation: {
       type: "responses",
@@ -163,7 +160,7 @@ export function liveSessionConfig({
 
 /**
  * Direct SIP `POST /v1/live/sessions/{id}/accept` body.
- * OpenAI rejects `session.audio.output.speed` (`unknown_parameter`); voice only (marin).
+ * Same shape as `liveSessionConfig()` (no `session.type`, no `audio.output.speed`).
  * Accepts liveSessionConfig() options or an already-built session (does not mutate it).
  */
 export function liveSessionConfigForSipAccept(sessionOrOpts = {}) {
@@ -171,12 +168,14 @@ export function liveSessionConfigForSipAccept(sessionOrOpts = {}) {
   if (sessionOrOpts.audio?.output) {
     const output = { ...sessionOrOpts.audio.output };
     delete output.speed;
-    return {
+    const next = {
       ...sessionOrOpts,
       audio: { ...sessionOrOpts.audio, output }
     };
+    delete next.type;
+    return next;
   }
-  return liveSessionConfig({ ...sessionOrOpts, omitSpeed: true });
+  return liveSessionConfig(sessionOrOpts);
 }
 
 export function gptLiveGreetingSpeakInstructions(firstMessage) {

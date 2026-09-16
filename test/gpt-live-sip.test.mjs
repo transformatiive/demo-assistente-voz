@@ -162,27 +162,31 @@ test("SIP URI and Live control URLs: US vs EU", () => {
   );
 });
 
-test("accept session matches browser Live defaults (type live, marin, speed 1, no format)", () => {
-  assert.equal(SESSION.type, "live");
+test("accept session matches browser Live defaults (no type, marin, no speed, no format)", () => {
+  assert.equal("type" in SESSION, false);
+  assert.equal(SESSION.type, undefined);
   assert.equal(SESSION.model, DEFAULT_GPT_LIVE_MODEL);
   assert.equal(SESSION.audio.output.voice, DEFAULT_GPT_LIVE_VOICE);
-  assert.equal(SESSION.audio.output.speed, DEFAULT_GPT_LIVE_SPEED);
+  assert.equal("speed" in SESSION.audio.output, false);
+  assert.equal(SESSION.audio.output.speed, undefined);
   assert.equal(SESSION.audio.format, undefined);
   assert.equal(SESSION.delegation.type, "responses");
   assert.equal(SESSION.delegation.responses.tools[0].name, "end_call");
 });
 
-test("SIP accept payload omits audio.output.speed (voice marin only)", () => {
+test("SIP accept payload omits session.type and audio.output.speed (voice marin only)", () => {
   const fromOpts = liveSessionConfigForSipAccept({
     instructions: "Alice pt-PT",
     delegateInstructions: "end_call only"
   });
+  assert.equal("type" in fromOpts, false);
   assert.equal(fromOpts.audio.output.voice, DEFAULT_GPT_LIVE_VOICE);
   assert.equal("speed" in fromOpts.audio.output, false);
   const fromSession = liveSessionConfigForSipAccept(SESSION);
+  assert.equal("type" in fromSession, false);
   assert.equal(fromSession.audio.output.voice, DEFAULT_GPT_LIVE_VOICE);
   assert.equal("speed" in fromSession.audio.output, false);
-  assert.equal(SESSION.audio.output.speed, DEFAULT_GPT_LIVE_SPEED);
+  assert.equal("speed" in SESSION.audio.output, false);
 });
 
 test("session_id from Live webhooks; realtime.call.incoming ignored without session_id", () => {
@@ -219,7 +223,8 @@ test("live.transport.incoming accepts, attaches sideband, greets, does not sessi
     assert.match(ctx.calls[0].url, /\/v1\/live\/sessions\/sess_ok\/accept$/);
     assert.equal(ctx.calls[0].method, "POST");
     const session = ctx.calls[0].body.session;
-    assert.equal(session.type, "live");
+    assert.equal("type" in session, false);
+    assert.equal(session.type, undefined);
     assert.equal(session.model, "gpt-live-1");
     assert.equal(session.audio.output.voice, "marin");
     assert.equal("speed" in session.audio.output, false);
