@@ -1,0 +1,28 @@
+name: inflate-html
+on:
+  push:
+    paths:
+      - 'build/*.b64gz'
+  workflow_dispatch:
+jobs:
+  inflate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode CJ and Simon HTML
+        run: |
+          set -euo pipefail
+          mkdir -p public/cj public/simon
+          if [ -f build/cj-index.html.b64gz ]; then
+            python3 -c "import gzip,base64,pathlib; p=pathlib.Path('build/cj-index.html.b64gz'); pathlib.Path('public/cj/index.html').write_bytes(gzip.decompress(base64.b64decode(p.read_text().strip())))"
+          fi
+          if [ -f build/simon-index.html.b64gz ]; then
+            python3 -c "import gzip,base64,pathlib; p=pathlib.Path('build/simon-index.html.b64gz'); pathlib.Path('public/simon/index.html').write_bytes(gzip.decompress(base64.b64decode(p.read_text().strip())))"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cj/index.html public/simon/index.html || true
+          git diff --cached --quiet || git commit -m "feat: inflate CJ and Simon demo HTML pages"
+          git push
