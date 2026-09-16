@@ -89,7 +89,6 @@ conversa=document.getElementById('conversa'),registo=document.getElementById('re
 aguarde=document.getElementById('aguarde'),audioEl=document.getElementById('audio');
 let pc,dc,stream,transcript=[],active=false,reconnects=0,wake,discoTimer,ending=false,endTimer,
 oaiAFalar=false,liveFirst='',liveIn='',liveOut='',liveReady=false;
-const provider='openai';
 const vozTeste=new URLSearchParams(location.search).get('voz');
 const CAT={SIMULACAO:'Simulação',GESTAO_APOLICE:'Gestão de apólice',SINISTRO:'Sinistro',CANCELAMENTO:'Cancelamento',PEDIDO_SEM_RESPOSTA:'Pedido sem resposta',OUTRO:'Outro'};
 const PROD={AUTOMOVEL:'Automóvel',MULTIRRISCOS_HABITACAO:'Multirriscos Habitação',MULTIRRISCOS_CONDOMINIO:'Multirriscos Condomínio',MULTIRRISCOS_EMPRESARIAL:'Multirriscos Empresarial',SAUDE:'Saúde',TVDE:'TVDE',ACIDENTES_TRABALHO_INDIVIDUAL:'Acidentes de Trabalho — Individual',ACIDENTES_TRABALHO_COLETIVO:'Acidentes de Trabalho — Coletivo',RC_GERAL:'Responsabilidade Civil Geral',RC_CONSTRUCAO:'RC Construção',RC_EMPRESARIAL:'RC Empresarial',RC_MEDICOS:'RC Médicos',RC_ARMAS_CACADOR:'RC Armas / Caçador',OBRAS_MONTAGENS:'Obras e Montagens',ANIMAIS:'Animais de Companhia',BICICLETAS_TROTINETAS:'Bicicletas e Trotinetas',VIAGEM:'Viagem',EMBARCACAO:'Embarcação',ACIDENTES_PESSOAIS:'Acidentes Pessoais'};
@@ -104,9 +103,9 @@ function mensagemErro(err){
     return 'Não foi possível ligar. Não foi encontrado um microfone neste dispositivo.';
   if(name==='NotReadableError')
     return 'Não foi possível ligar. O microfone está ocupado noutro programa.';
-  if(/openai indisponível|falta OPENAI_API_KEY|invalid.?api.?key|incorrect api key|401\b|403\b/i.test(msg))
+  if(/indisponível|API_KEY|invalid.?api.?key|incorrect api key|401\b|403\b/i.test(msg))
     return 'Não foi possível ligar. A sessão de voz não está disponível de momento. Tente mais tarde.';
-  if(/sem sessão|sem SDP|ICE timeout|Live session|sessão \d|An SDP offer|502\b|503\b|500\b/i.test(msg))
+  if(/sem sessão|sem SDP|ICE timeout|missing SDP|sessão \d|An SDP offer|502\b|503\b|500\b/i.test(msg))
     return 'Não foi possível ligar. Falha ao criar a sessão de voz. Tente novamente.';
   if(name==='TypeError'||/Failed to fetch|NetworkError|Load failed/i.test(msg))
     return 'Não foi possível ligar. Falha de rede. Verifique a ligação e tente novamente.';
@@ -174,7 +173,7 @@ async function esperarIce(connection){
     connection.addEventListener('icegatheringstatechange',on);on();
   });
 }
-async function ligarOpenAI(retoma){
+async function ligarSessao(retoma){
   liveIn='';liveOut='';liveReady=false;oaiAFalar=false;
   pc=new RTCPeerConnection();
   pc.ontrack=e=>{audioEl.srcObject=e.streams[0];audioEl.play().catch(()=>{});};
@@ -191,7 +190,7 @@ async function ligarOpenAI(retoma){
   const sdp=pc.localDescription&&pc.localDescription.sdp;
   if(!sdp) throw new Error('sem SDP');
   const r=await fetch('/api/cj/session',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(Object.assign({provider:'openai',sdp},vozTeste?{voice:vozTeste}:{},retoma&&transcript.length?{transcript}:{}))});
+    body:JSON.stringify(Object.assign({sdp},vozTeste?{voice:vozTeste}:{},retoma&&transcript.length?{transcript}:{}))});
   let s={};try{s=await r.json();}catch(_){throw new Error('sessão '+r.status);}
   if(!r.ok||s.error) throw new Error(s.error||('sessão '+r.status));
   if(!s.transport||!s.transport.sdp) throw new Error('sem sessão');
@@ -200,7 +199,7 @@ async function ligarOpenAI(retoma){
 }
 async function ligar(retoma){
   if(!stream) stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
-  await ligarOpenAI(retoma);
+  await ligarSessao(retoma);
 }
 btn.onclick=()=>active?stop():start();
 async function start(){
@@ -243,7 +242,7 @@ async function stop(){
   dial.classList.remove('on');btn.setAttribute('aria-label','Iniciar chamada');
   if(transcript.length){
     status('');aguarde.style.display='flex';
-    let r={};try{r=await (await fetch('/api/cj/extract',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({transcript,diag:{reconexoes:reconnects,motor:'GPT-Live 1'}})})).json();}catch(_){}
+    let r={};try{r=await (await fetch('/api/cj/extract',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({transcript,diag:{reconexoes:reconnects}})})).json();}catch(_){}
     aguarde.style.display='none';
     const d=r.resultado;
     if(d){

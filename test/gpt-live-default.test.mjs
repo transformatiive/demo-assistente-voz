@@ -93,19 +93,33 @@ test("server wires Live SDP exchange; advertised voice is marin not ara", () => 
   assert.doesNotMatch(serverSrc, /\$\{OPENAI_BASE\}\/v1\/realtime\/client_secrets/);
 });
 
-test("browser default is GPT-Live WebRTC, not Grok/Ara", () => {
+test("browser pages hide engine names; Lia/Clara and brand copy stay", () => {
   for (const page of [html, cjHtml]) {
-    assert.match(page, /provider='openai'/);
     assert.match(page, /session\.instructions\.append/);
     assert.match(page, /transport\.sdp/);
     assert.match(page, /session\.started/);
+    assert.match(page, /Em chamada\. Fale normalmente\./);
+    assert.match(page, /A ligar…/);
     assert.doesNotMatch(page, /\/v1\/realtime\/calls/);
     assert.doesNotMatch(page, /id="vers"/);
-    assert.doesNotMatch(page, /Grok Live/);
-    assert.doesNotMatch(page, /ElevenLabs/);
     assert.doesNotMatch(page, /data-p="grok"/);
     assert.doesNotMatch(page, /data-p="eleven"/);
+    assert.doesNotMatch(page, /GPT-Live/i);
+    assert.doesNotMatch(page, /GPT Live/i);
+    assert.doesNotMatch(page, /Grok/i);
+    assert.doesNotMatch(page, /ElevenLabs/i);
+    assert.doesNotMatch(page, /OpenAI/i);
+    assert.doesNotMatch(page, /xAI/i);
+    assert.doesNotMatch(page, /powered by/i);
+    assert.doesNotMatch(page, /a falar via/i);
+    assert.doesNotMatch(page, /motor:/i);
   }
+  assert.match(html, /Fale com a <em>Lia<\/em>/);
+  assert.match(html, /Simon Says/);
+  assert.doesNotMatch(html, /href="\/cj\//);
+  assert.match(cjHtml, /Fale com a <em>Clara<\/em>/);
+  assert.match(cjHtml, /CJ Seguros/);
+  assert.doesNotMatch(cjHtml, /href="\/simon\//);
 });
 
 test("root is a neutral stub, not a dual-demo picker", () => {
