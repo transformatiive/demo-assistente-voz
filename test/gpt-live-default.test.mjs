@@ -24,7 +24,10 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const serverSrc = fs.readFileSync(path.join(root, "server.js"), "utf8");
 const sipSrc = fs.readFileSync(path.join(root, "sip-agent.js"), "utf8");
 const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
-const html = fs.readFileSync(path.join(root, "public/index.html"), "utf8");
+const html = fs.readFileSync(path.join(root, "public/simon/index.html"), "utf8");
+const cjHtml = fs.readFileSync(path.join(root, "public/cj/index.html"), "utf8");
+const landing = fs.readFileSync(path.join(root, "public/index.html"), "utf8");
+const logo = fs.readFileSync(path.join(root, "public/simon/logo.svg"), "utf8");
 
 test("defaults are gpt-live-1 / marin / 1.0, not realtime-2.1 or bossa", () => {
   assert.equal(DEFAULT_GPT_LIVE_MODEL, "gpt-live-1");
@@ -91,12 +94,49 @@ test("server wires Live SDP exchange; advertised voice is marin not ara", () => 
 });
 
 test("browser default is GPT-Live WebRTC, not Grok/Ara", () => {
-  assert.match(html, /provider='openai'/);
-  assert.match(html, /data-p="openai">GPT-Live 1/);
-  assert.match(html, /session\.instructions\.append/);
-  assert.match(html, /transport\.sdp/);
-  assert.match(html, /session\.started/);
-  assert.doesNotMatch(html, /\/v1\/realtime\/calls/);
+  for (const page of [html, cjHtml]) {
+    assert.match(page, /provider='openai'/);
+    assert.match(page, /session\.instructions\.append/);
+    assert.match(page, /transport\.sdp/);
+    assert.match(page, /session\.started/);
+    assert.doesNotMatch(page, /\/v1\/realtime\/calls/);
+    assert.doesNotMatch(page, /id="vers"/);
+    assert.doesNotMatch(page, /Grok Live/);
+    assert.doesNotMatch(page, /ElevenLabs/);
+    assert.doesNotMatch(page, /data-p="grok"/);
+    assert.doesNotMatch(page, /data-p="eleven"/);
+  }
+});
+
+test("root is a neutral stub, not a dual-demo picker", () => {
+  assert.doesNotMatch(landing, /a class="card/);
+  assert.doesNotMatch(landing, /href="\/cj\/"/);
+  assert.doesNotMatch(landing, /href="\/simon\/"/);
+  assert.doesNotMatch(landing, /Demo 1/);
+  assert.doesNotMatch(landing, /Demo 2/);
+  assert.doesNotMatch(landing, /CJ Seguros · Clara/);
+  assert.doesNotMatch(landing, /Simon Says · Lia/);
+  assert.match(landing, /\/cj\//);
+  assert.match(landing, /\/simon\//);
+  assert.doesNotMatch(html, /href="\/cj\//);
+  assert.doesNotMatch(cjHtml, /href="\/simon\//);
+});
+
+test("Lia page uses Simon Says Studio wordmark and distinguishes mic vs session errors", () => {
+  assert.match(logo, /aria-label="Simon Says Studio"/);
+  assert.match(logo, /viewBox="0 0 245 149"/);
+  assert.match(logo, /cdn\.sanity\.io\/images\/3d6ca656/);
+  assert.doesNotMatch(logo, />SS</);
+  assert.match(html, /href="favicon.ico"/);
+  assert.match(html, /apple-icon\.png/);
+  assert.match(html, /#AC9D8B/);
+  assert.match(html, /#1a1814/);
+  assert.doesNotMatch(html, /#2a9d90/);
+  assert.doesNotMatch(html, /#c8a46b/);
+  assert.match(html, /Permita o microfone no browser/);
+  assert.match(html, /sessão de voz não está disponível/);
+  assert.match(html, /Falha ao criar a sessão de voz/);
+  assert.match(html, /Não foi encontrado um microfone/);
 });
 
 test("README documents GPT-Live SIP cutover and webhook path", () => {

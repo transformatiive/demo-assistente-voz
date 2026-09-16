@@ -1,10 +1,10 @@
 # demo-assistente-voz
 
-Dual **web** voice demos on one Node/Express service (Railway-ready):
+Two **separate** web voice demos on one Node/Express service (Railway-ready). They are for different clients — `/` is not a dual picker.
 
 | Path | Demo | Assistant |
 |------|------|-----------|
-| `/` | Landing | — |
+| `/` | Neutral stub | — |
 | `/cj/` | [CJ Seguros](https://cjseguros.pt/) | Clara |
 | `/simon/` | [Simon Says Studio](https://www.simonsays.studio/) | Lia |
 
@@ -27,18 +27,18 @@ npm start              # http://127.0.0.1:3847
 | `GPT_LIVE_MODEL` / `GPT_LIVE_VOICE` / `GPT_LIVE_SPEED` | No | Defaults from `live-session.js` |
 | `TEXT_MODEL` | No | Post-call extract (default `gpt-5.4-mini`) |
 | `RESULT_WEBHOOK` | No | Optional n8n/webhook for call results |
-| `XAI_API_KEY` | No | Only if testing Grok tab |
-| `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` | No | Only if testing ElevenLabs tab |
+| `XAI_API_KEY` | No | Server stub only (not offered in the UI) |
+| `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` | No | Server stub only (not offered in the UI) |
 
 ## Brand tokens (web pages only)
 
 - **CJ**: Montserrat · accent `#01B5C5` · ink `#143852` · bg `#F7F8FA` · SVG wordmark (PNG assets optional under `/cj/`)
-- **Simon Says**: Albert Sans + Montserrat · accent `#2a9d90` · ink `#35332F` · warm bg `#f7f4ef` · SVG wordmark
+- **Simon Says**: Albert Sans + Montserrat (as on [simonsays.studio](https://www.simonsays.studio/)) · ink `#1a1814` · sand accent `#AC9D8B` · white canvas · official stacked wordmark from Sanity (`3d6ca656`) + `S` favicon
 
 ## Script differences
 
-- **CJ**: Same insurance intake script as Alfa (simulation / policy / claim / cancel), renamed to Clara + CJ Seguros.
-- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree.
+- **CJ**: Same insurance intake script as Alfa (simulation / policy / claim / cancel), renamed to Clara + CJ Seguros. GPT-Live 1 only — no Grok / ElevenLabs picker.
+- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree. GPT-Live 1 only — no Grok / ElevenLabs picker.
 
 ## Deploy
 
