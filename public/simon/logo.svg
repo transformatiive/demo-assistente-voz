@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 56" role="img" aria-label="Simon Says Studio">
+  <rect width="340" height="56" rx="8" fill="#f7f4ef"/>
+  <rect x="10" y="12" width="32" height="32" rx="6" fill="#2a9d90"/>
+  <text x="26" y="34" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="14" fill="#fff">SS</text>
+  <text x="54" y="34" font-family="Albert Sans,Montserrat,Arial,sans-serif" font-weight="700" font-size="20" fill="#35332F">Simon Says Studio</text>
+</svg>
