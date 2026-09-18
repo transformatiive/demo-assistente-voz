@@ -85,7 +85,7 @@ export const demos = {
     assistantName: "Lia",
     company: "Simon Says Studio",
     firstMessage:
-      "Olá, fala a Lia, assistente virtual do Simon Says Studio. Posso ajudar com fotografia, vídeo ou aluguer de estúdio em Lisboa, e registar o seu pedido para a equipa. Em que posso ajudar?",
+      "Olá, fala a Lia, assistente virtual do Simon Says Studio. Posso ajudar com fotografia, vídeo ou aluguer de estúdio em Lisboa, e tratar da sua marcação. Em que posso ajudar?",
     prompt: loadPrompt("prompts/simon.md"),
     transcriptionPrompt:
       "Chamada para o Simon Says Studio, estúdio de fotografia e vídeo em Lisboa. Termos frequentes: Lia, Simon Says, Simão, Jorge Simão, estúdio, ciclorama, cozinha, aluguer, sessão, fotografia, vídeo, gastronomia, moda, e-commerce, geral@simonsays.pt.",

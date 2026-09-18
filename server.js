@@ -60,6 +60,15 @@ const FLOW_RULES = `# Tratamento do cliente (neutro quanto ao género, prioridad
 - Depois de falares, ficas em SILÊNCIO TOTAL até o cliente responder.
 `;
 
+/** Simon/Lia demo: same Atende rule — simulate validation and speak confirmation in this turn. */
+const SIMON_DEMO_RULES = `# Demonstração Lia (prioridade máxima)
+Uma só conversa contínua. O guião completo já está nesta sessão.
+Disponibilidade, marcação, calendário, SMS, pagamento, identidade ou qualquer validação humana: simula e confirma em voz alta NESTE turno.
+Não chames uma ferramenta e esperes. Não digas que vais confirmar e cales-te.
+Português europeu de Portugal apenas (nunca brasileiro). Vocabulário: marcação, telemóvel, ecrã — nunca celular.
+end_call só DEPOIS de a confirmação simulada já ter sido dita.
+`;
+
 function buildInstructions(demo) {
   const callBookends = `
 # Início da chamada
@@ -68,7 +77,8 @@ A tua primeira fala é exatamente: "${demo.firstMessage}"
 # Terminar a chamada
 Só podes chamar a ferramenta end_call DEPOIS de confirmares o pedido com o cliente, dizeres a frase de fecho e o cliente se despedir ou ficar em silêncio.
 `;
-  return FLOW_RULES + "\n" + demo.prompt + "\n" + callBookends;
+  const demoRules = demo.id === "simon" ? SIMON_DEMO_RULES + "\n" : "";
+  return FLOW_RULES + "\n" + demo.prompt + "\n" + demoRules + callBookends;
 }
 
 function buildGrokInstructions(demo) {
@@ -87,12 +97,16 @@ Frases curtas; tom calmo; assistente feminina ("Obrigada").
 
 function sessionConfigFor(demo, voice = VOICE, input) {
   const instructions = buildInstructions(demo);
+  const delegateInstructions =
+    demo.id === "simon"
+      ? `És o raciocínio da Lia (Simon Says Studio). Não chames ferramentas de calendário, SMS, pagamento ou identidade — não existem. A Lia simula disponibilidade e confirma em voz alta no mesmo turno. Chama end_call só depois dessa confirmação e do fecho já ditos.`
+      : `És o raciocínio de uma chamada da ${demo.assistantName} (${demo.company}). Chama end_call só depois do fecho confirmado.`;
   return liveSessionConfig({
     model: LIVE_MODEL,
     voice,
     instructions,
     delegateModel: LIVE_DELEGATE_MODEL,
-    delegateInstructions: `És o raciocínio de uma chamada da ${demo.assistantName} (${demo.company}). Chama end_call só depois do fecho confirmado.`,
+    delegateInstructions,
     input
   });
 }

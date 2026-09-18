@@ -38,7 +38,7 @@ npm start              # http://127.0.0.1:3847
 ## Script differences
 
 - **CJ**: Same insurance intake script as Alfa (simulation / policy / claim / cancel), renamed to Clara + CJ Seguros. GPT-Live 1 only — no Grok / ElevenLabs picker.
-- **Simon Says**: Studio FAQ + booking intent (photo/video/studio rental), knowledge from simonsays.studio; no insurance product tree. GPT-Live 1 only — no Grok / ElevenLabs picker.
+- **Simon Says**: Studio FAQ + booking. Availability, booking, SMS, payment or identity checks are **simulated and spoken in the same turn** (Atende demo rule) — no tool wait, no “a equipa confirma” then silence. GPT-Live 1 only — no Grok / ElevenLabs picker.
 
 ## Deploy
 
